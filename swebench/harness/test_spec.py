@@ -305,9 +305,9 @@ def make_test_spec(instance: SWEbenchInstance) -> TestSpec:
         return instance
     instance_id = instance[KEY_INSTANCE_ID]
     # if there's capital letters in the repo name, convert to lowercase
-    if instance_id != instance_id.lower():
-        print(f"Instance ID {instance_id} contains capital letters. Converting to lowercase.")
-        instance_id = instance_id.lower()
+    # if instance_id != instance_id.lower():
+    #     print(f"Instance ID {instance_id} contains capital letters. Converting to lowercase.")
+    #     instance_id = instance_id.lower()
     repo = instance["repo"].lower()
     version = instance["version"]
     base_commit = instance["base_commit"]
