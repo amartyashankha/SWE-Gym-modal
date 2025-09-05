@@ -56,7 +56,7 @@ index 0000000..1234567
     full_dataset = instances
     
     # Run ID
-    run_id = f"modal_test_{int(time.time())}"
+    run_id = f"modal_test"
     timeout = 1800  # 30 minutes
     
     print(f"\nStarting Modal evaluation:")
