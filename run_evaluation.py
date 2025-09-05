@@ -1,19 +1,16 @@
 #!/usr/bin/env python
 """Test script for Modal evaluation with MONAI instance."""
 
+import argparse
 import json
-import time
 from pathlib import Path
 from swebench.harness.constants import KEY_INSTANCE_ID, KEY_MODEL, KEY_PREDICTION
 from swebench.harness.modal_eval.run_evaluation_modal import run_instances_modal
 from swebench.harness.test_spec import make_test_spec
 from datasets import load_dataset
 
-def test_modal_evaluation():
-    """Test modal evaluation with a MONAI instance."""
-    
-    # Instance ID to test
-    instance_id = "Project-MONAI__MONAI-1095"
+def test_modal_evaluation(instance_id, run_id, patch_file):
+    """Test modal evaluation with a specific instance."""
     
     # Load the dataset to get the instance data
     print(f"Loading SWE-Gym dataset...")
@@ -33,8 +30,16 @@ def test_modal_evaluation():
     print(f"Found instance: {instance_id}")
     print(f"Problem statement: {instance_data['problem_statement'][:200]}...")
     
-    # Create a simple patch (empty for now, just to test the flow)
-    model_patch = """diff --git a/test.py b/test.py
+    # Read patch from file
+    patch_path = Path(patch_file)
+    if patch_path.exists():
+        print(f"Reading patch from: {patch_path}")
+        with open(patch_path, 'r') as f:
+            model_patch = f.read()
+    else:
+        print(f"Patch file not found: {patch_path}")
+        print("Using default test patch...")
+        model_patch = """diff --git a/test.py b/test.py
 new file mode 100644
 index 0000000..1234567
 --- /dev/null
@@ -55,8 +60,7 @@ index 0000000..1234567
     instances = [instance_data]
     full_dataset = instances
     
-    # Run ID
-    run_id = f"modal_test"
+    # Timeout
     timeout = 1800  # 30 minutes
     
     print(f"\nStarting Modal evaluation:")
@@ -88,11 +92,41 @@ index 0000000..1234567
                     report = json.load(f)
                 print(f"\nEvaluation report:")
                 print(json.dumps(report, indent=2))
+                
         
     except Exception as e:
         print(f"\nError during evaluation: {e}")
         import traceback
         traceback.print_exc()
 
+def main():
+    parser = argparse.ArgumentParser(description='Run Modal evaluation for SWE-Gym instances')
+    parser.add_argument(
+        '--instance-id',
+        type=str,
+        default='Project-MONAI__MONAI-1095',
+        help='Instance ID to evaluate (default: Project-MONAI__MONAI-1095)'
+    )
+    parser.add_argument(
+        '--run-id',
+        type=str,
+        default=None,
+        help='Run ID for the evaluation (default: modal_test_<timestamp>)'
+    )
+    parser.add_argument(
+        '--patch-file',
+        type=str,
+        default='test_patch.diff',
+        help='Path to the patch file (default: test_patch.diff)'
+    )
+    
+    args = parser.parse_args()
+    
+    # Generate run ID if not provided
+    if args.run_id is None:
+        args.run_id = f"modal_test"
+    
+    test_modal_evaluation(args.instance_id, args.run_id, args.patch_file)
+
 if __name__ == "__main__":
-    test_modal_evaluation()
+    main()
