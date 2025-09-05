@@ -355,8 +355,8 @@ def get_dataset_from_preds(
 def make_run_report(
         predictions: dict,
         full_dataset: list,
-        client: docker.DockerClient,
-        run_id: str
+        run_id: str,
+        client: docker.DockerClient | None = None,
     ) -> Path:
     """
     Make a final evaluation and run report of the instances that have been run.
@@ -413,17 +413,18 @@ def make_run_report(
             # Otherwise, the instance was not run successfully
             error_ids.add(instance_id)
 
-    # get remaining images and containers
-    images = list_images(client)
-    test_specs = list(map(make_test_spec, full_dataset))
-    for spec in test_specs:
-        image_name = spec.instance_image_key
-        if image_name in images:
-            unremoved_images.add(image_name)
-    containers = client.containers.list(all=True)
-    for container in containers:
-        if run_id in container.name:
-            unstopped_containers.add(container.name)
+    if client:
+        # get remaining images and containers
+        images = list_images(client)
+        test_specs = list(map(make_test_spec, full_dataset))
+        for spec in test_specs:
+            image_name = spec.instance_image_key
+            if image_name in images:
+                unremoved_images.add(image_name)
+        containers = client.containers.list(all=True)
+        for container in containers:
+            if run_id in container.name:
+                unstopped_containers.add(container.name)
 
     # print final report
     dataset_ids = {i[KEY_INSTANCE_ID] for i in full_dataset}
@@ -534,7 +535,7 @@ def main(
 
     # clean images + make final report
     clean_images(client, existing_images, cache_level, clean)
-    make_run_report(predictions, full_dataset, client, run_id)
+    make_run_report(predictions, full_dataset, run_id, client)
 
 
 if __name__ == "__main__":

@@ -79,14 +79,12 @@ class TestSpec:
 
     @property
     def instance_image_key(self):
-        # Docker repository names must be lowercase; normalize the instance portion
-        return f"sweb.eval.{self.arch}.{self.instance_id.lower()}:latest"
+        return f"sweb.eval.{self.arch}.{self.instance_id}:latest"
 
     def get_instance_container_name(self, run_id=None):
-        # Normalize container name to lowercase for Docker compatibility
         if not run_id:
-            return f"sweb.eval.{self.instance_id.lower()}"
-        return f"sweb.eval.{self.instance_id.lower()}.{run_id}"
+            return f"sweb.eval.{self.instance_id}"
+        return f"sweb.eval.{self.instance_id}.{run_id}"
 
     @property
     def base_dockerfile(self):
