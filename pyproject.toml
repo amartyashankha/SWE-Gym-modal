@@ -23,6 +23,7 @@ dependencies = [
     'beautifulsoup4',
     'chardet',
     'datasets',
+    'pyarrow<18',
     'docker',
     'ghapi',
     'GitPython',
