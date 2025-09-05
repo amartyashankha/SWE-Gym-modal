@@ -436,6 +436,7 @@ def run_instances_modal(
                         for test_spec in run_test_specs
                     ],
                     return_exceptions=True,
+                    wrap_returned_exceptions=True,
                 )
 
                 for result in results:
