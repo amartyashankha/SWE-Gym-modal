@@ -1,63 +1,17 @@
-[build-system]
-requires = ['setuptools>=42']
-build-backend = 'setuptools.build_meta'
-
 [project]
-name = 'swebench'
-description = 'The official SWE-bench package - a benchmark for evaluating LMs on software engineering'
-readme = 'README.md'
-requires-python = '>=3.8'
-license = { file = 'LICENSE' }
-keywords = ['nlp', 'benchmark', 'code']
-authors = [
-    { name = 'John Yang', email = 'byjohnyang@gmail.com' },
-]
-classifiers = [
-    'Programming Language :: Python :: 3.8',
-    'Programming Language :: Python :: 3.9',
-    'Programming Language :: Python :: 3 :: Only',
-    'License :: OSI Approved :: MIT License',
-    'Operating System :: OS Independent',
-]
+name = "swe-gym-modal"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
 dependencies = [
-    'beautifulsoup4',
-    'chardet',
-    'datasets',
-    'pyarrow<18',
-    'docker',
-    'ghapi',
-    'GitPython',
-    'pre-commit',
-    'python-dotenv',
-    'requests',
-    'rich',
-    'unidiff',
-    'tqdm',
-    "modal>=0.65.66",
-    "tenacity>=9.0.0",
+    "bs4>=0.0.2",
+    "datasets>=4.0.0",
+    "docker>=7.1.0",
+    "ghapi>=1.0.6",
+    "modal>=1.1.4",
+    "python-dotenv>=1.1.1",
+    "tenacity>=9.1.2",
+    "tqdm>=4.67.1",
+    "unidiff>=0.7.5",
 ]
-dynamic = ['version']
-
-[project.urls]
-Homepage = 'https://swebench.com'
-Documentation = 'https://github.com/princeton-nlp/SWE-bench'
-"Bug Reports" = 'http://github.com/princeton-nlp/SWE-bench/issues'
-"Source Code" = 'http://github.com/princeton-nlp/SWE-bench'
-Website = 'https://swebench.com'
-
-[project.optional-dependencies]
-inference = [
-    'tiktoken',
-    'openai',
-    'anthropic',
-    'transformers',
-    'peft',
-    'sentencepiece',
-    'protobuf',
-    'torch',
-    'jedi',
-    'tenacity',
-]
-
-[tool.setuptools.dynamic]
-version = { attr = 'swebench.__version__' }
