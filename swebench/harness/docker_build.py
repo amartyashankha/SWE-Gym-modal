@@ -435,10 +435,8 @@ def build_instance_image(
         logger = setup_logger(test_spec.instance_id, build_dir / "prepare_image.log")
 
     # Get the image names and dockerfile for the instance image
-    # Ensure lowercase image name for Docker
-    image_name = test_spec.instance_image_key.lower()
-    # Environment images are already lowercase per key construction, normalize anyway
-    env_image_name = test_spec.env_image_key.lower()
+    image_name = test_spec.instance_image_key
+    env_image_name = test_spec.env_image_key
     dockerfile = test_spec.instance_dockerfile
 
     # Check that the env. image the instance image is based on exists
@@ -522,7 +520,7 @@ def build_container(
         # Create the container
         logger.info(f"Creating container for {test_spec.instance_id}...")
         container = client.containers.create(
-            image=test_spec.instance_image_key.lower(),
+            image=test_spec.instance_image_key,
             name=test_spec.get_instance_container_name(run_id),
             user=user,
             detach=True,

@@ -16,7 +16,7 @@ from swebench.harness.constants import (
     TestStatus,
 )
 from swebench.harness.test_spec import TestSpec
-from swebench.harness.log_parsers import MAP_REPO_TO_PARSER
+from swebench.harness.log_parsers import MAP_REPO_TO_PARSER, LOWER_MAP_REPO_TO_PARSER
 
 
 # MARK: Utility functions
@@ -46,7 +46,8 @@ def get_logs_eval(log_fp: str) -> tuple[dict[str, str], bool]:
     # Convert e.g. "logs/scikit-learn__scikit-learn-12421/test_output.txt" to "scikit-learn/scikit-learn"
     sample_id = str(Path(log_fp).parent.stem)  # e.g. scikit-learn__scikit-learn-12421
     repo = "-".join(sample_id.replace("__", "/").split("-")[:-1])  # e.g. scikit-learn/scikit-learn
-    log_parser = MAP_REPO_TO_PARSER[repo]
+    # Use lowercase map to handle case-insensitive repo names
+    log_parser = LOWER_MAP_REPO_TO_PARSER[repo.lower()]
 
     with open(log_fp) as f:
         content = f.read()
