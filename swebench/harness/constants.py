@@ -42,15 +42,15 @@ class TestStatus(Enum):
     ERROR = "ERROR"
     XFAIL = "XFAIL"
 
-TEST_PYTEST = "pytest --no-header -rA --tb=no -p no:cacheprovider"
-TEST_PYTEST_VERBOSE = "pytest -rA --tb=long -p no:cacheprovider"
-TEST_ASTROPY_PYTEST = "pytest -rA -vv -o console_output_style=classic --tb=no"
+TEST_PYTEST = "pytest -n auto --no-header -rA --tb=no -p no:cacheprovider"
+TEST_PYTEST_VERBOSE = "pytest -n auto -rA --tb=long -p no:cacheprovider"
+TEST_ASTROPY_PYTEST = "pytest -n auto -rA -vv -o console_output_style=classic --tb=no"
 TEST_DJANGO = "./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1"
 TEST_DJANGO_NO_PARALLEL = "./tests/runtests.py --verbosity 2"
-TEST_SEABORN = "pytest --no-header -rA"
-TEST_SEABORN_VERBOSE = "pytest -rA --tb=long"
-TEST_PYTEST = "pytest -rA"
-TEST_PYTEST_VERBOSE = "pytest -rA --tb=long"
+TEST_SEABORN = "pytest -n auto --no-header -rA"
+TEST_SEABORN_VERBOSE = "pytest -n auto -rA --tb=long"
+TEST_PYTEST = "pytest -n auto -rA"
+TEST_PYTEST_VERBOSE = "pytest -n auto -rA --tb=long"
 TEST_SPHINX = "tox --current-env -epy39 -v --"
 TEST_SYMPY = "PYTHONWARNINGS='ignore::UserWarning,ignore::SyntaxWarning' bin/test -C --verbose"
 TEST_SYMPY_VERBOSE = "bin/test -C --verbose"
@@ -80,7 +80,7 @@ SPECS = {
     "install": "python -m pip install -v --no-use-pep517 --no-build-isolation -e .",
 
     # prefix for running the test command
-    "test_cmd": "pytest -n0 -rA"
+    "test_cmd": "pytest -n auto -rA"
 }
 """
 
@@ -1626,7 +1626,7 @@ SPECS_MYPY = {
         "python": "3.12", 
         # see https://github.com/python/mypy/mypy/test/testcheck.py#L39
         "install": "python -m pip install -r test-requirements.txt; python -m pip install -e .; hash -r",
-        "test_cmd": "pytest -rA -k"
+        "test_cmd": "pytest -n auto -rA -k"
     }
     for k in ["1.7","1.8","1.9", "1.10", "1.11"]
 }
@@ -1640,7 +1640,7 @@ SPECS_MYPY.update(
             ],
             "python": "3.11", 
             "install": "python -m pip install -r test-requirements.txt; python -m pip install -e .; hash -r",
-            "test_cmd": "pytest -n0 -rA -k"
+            "test_cmd": "pytest -n auto -rA -k"
         }
         for k in ["1.0", "1.1", "1.2", "1.3", "1.4", "1.5", "1.6"]
     }
@@ -1655,7 +1655,7 @@ SPECS_MYPY.update(
             ],
             "python": "3.10", 
             "install": "python -m pip install -r test-requirements.txt; python -m pip install -e .; pip install pytest pytest-xdist; hash -r",
-            "test_cmd": "pytest -n0 -rA -k"
+            "test_cmd": "pytest -n auto -rA -k"
         }
         for k in ["0.990", "0.980", "0.970", "0.960","0.950", "0.940"]
     }
@@ -1671,7 +1671,7 @@ SPECS_MYPY.update(
             "python": "3.9", 
             # types-typing-extensions is yanked, we need to set a specific version manually
             "install": "python -m pip install -r test-requirements.txt; python -m pip install -e .; pip install pytest pytest-xdist; hash -r;",
-            "test_cmd": "pytest -n0 -rA -k"
+            "test_cmd": "pytest -n auto -rA -k"
         }
         for k in ["0.920", "0.910", "0.820", "0.810", "0.800"]
     }
@@ -1688,7 +1688,7 @@ SPECS_MYPY.update(
 #             "python": "3.8", 
 #                 "apt-get update && apt-get install -y libenchant-2-dev hunspell-en-us"
 #             "install": "python -m pip install -r test-requirements.txt; python -m pip install -e .; pip install pytest; hash -r;",
-#             "test_cmd": "pytest -rA -k"
+#             "test_cmd": "pytest -n auto -rA -k"
 #         }
 #         for k in []
 #     }
@@ -1700,7 +1700,7 @@ SPECS_MYPY.update(
 MAP_REPO_VERSION_TO_SPECS.update({"python/mypy": SPECS_MYPY})
 
 
-TEST_MOTO = "pytest -n0 -rA"
+TEST_MOTO = "pytest -n auto -rA"
 SPECS_MOTO = {
     k: {
         "python": "3.12", 
@@ -1717,7 +1717,7 @@ SPECS_MOTO = {
 }
 MAP_REPO_VERSION_TO_SPECS.update({"getmoto/moto": SPECS_MOTO})
 
-TEST_CONAN = "pytest -n0 -rA"
+TEST_CONAN = "pytest -n auto -rA"
 
 
 # extra args before cython3.0 https://github.com/conan-io/conan/issues/14319
@@ -1755,7 +1755,7 @@ MAP_REPO_VERSION_TO_SPECS.update({"conan-io/conan": SPECS_CONAN})
 
 
 
-TEST_DASK = "pytest -n0 -rA  --color=no"
+TEST_DASK = "pytest -n auto -rA  --color=no"
 # pandas 2.0 is a breaking change, need to separate from there
 SPECS_DASK = {
     k: {
@@ -1773,7 +1773,7 @@ SPECS_DASK = {
 }
 MAP_REPO_VERSION_TO_SPECS.update({"dask/dask": SPECS_DASK})
 
-TEST_MONAI = "pytest -rA "
+TEST_MONAI = "pytest -n auto -rA "
 SPECS_MONAI = {
     k: {
         "python": "3.8", 
@@ -1793,7 +1793,7 @@ SPECS_MONAI = {
 MAP_REPO_VERSION_TO_SPECS.update({"Project-MONAI/MONAI": SPECS_MONAI})
 
 # dvc
-TEST_DVC = "pytest -rA"
+TEST_DVC = "pytest -n auto -rA"
 SPECS_DVC = {
     k: {
         "python": "3.10", 
@@ -1829,7 +1829,7 @@ MAP_REPO_VERSION_TO_SPECS.update({"iterative/dvc": SPECS_DVC})
 
 # bokeh
 # https://docs.bokeh.org/en/latest/docs/dev_guide/setup.html
-TEST_BOKEH = "pytest -rA -n0"
+TEST_BOKEH = "pytest -rA -n auto"
     # for k in ['0.4', '0.5', '0.6', '0.7', '0.8', '0.9', '0.10', '0.11', '0.12', '0.13', '0.1181316818', '1.0', '1.1', '1.2', '1.3', '1.4', '2.0', '2.1', '2.3', '2.4', '3.0', '3.3', '3.4', '3.5']
 SPECS_BOKEH = {
     k: {
@@ -1883,7 +1883,7 @@ MAP_REPO_VERSION_TO_SPECS.update({"bokeh/bokeh": SPECS_BOKEH})
 # modin
 # https://github.com/modin-project/modin/pull/7312
 # numpy2.0 is supported in June 2024, we will need to restrict numpy version to be before 2.0
-TEST_MODIN = "pytest -n0 -rA"
+TEST_MODIN = "pytest -n auto -rA"
 SPECS_MODIN = {
     k: {
         "python": "3.9", 
@@ -1905,7 +1905,7 @@ MAP_REPO_VERSION_TO_SPECS.update({"modin-project/modin": SPECS_MODIN})
 
 # spyder
 # https://github.com/spyder-ide/spyder/blob/master/CONTRIBUTING.md
-TEST_SPYDER = "pytest -n0 -rA"
+TEST_SPYDER = "pytest -n auto -rA"
 SPECS_SPYDER = {
     k: {
         "python": "3.9", 
@@ -1925,7 +1925,7 @@ MAP_REPO_VERSION_TO_SPECS.update({"spyder-ide/spyder": SPECS_SPYDER})
 
 # hypothesis
 # https://github.com/HypothesisWorks/hypothesis/blob/eaafdfcad3f362e75746863472101d4cfabbc33d/CONTRIBUTING.rst
-TEST_HYPOTHESIS = "pytest -n0 -rA --tb=no --no-header"
+TEST_HYPOTHESIS = "pytest -n auto -rA --tb=no --no-header"
 SPECS_HYPOTHESIS = {
     k: {
         "python": "3.10", 
@@ -1943,7 +1943,7 @@ MAP_REPO_VERSION_TO_SPECS.update({"HypothesisWorks/hypothesis": SPECS_HYPOTHESIS
 # pydantic
 # https://docs.pydantic.dev/latest/contributing/
 # TEST_PYDANTIC = 'export PATH="$HOME/.local/bin:$PATH"; pdm run coverage run -m pytest -rA --tb=short --no-header'
-TEST_PYDANTIC = 'pytest -rA --tb=short -vv -o console_output_style=classic --no-header'
+TEST_PYDANTIC = 'pytest -n auto -rA --tb=short -vv -o console_output_style=classic --no-header'
 SPECS_PYDANTIC = {
     k: {
         "python": "3.8",
@@ -1981,7 +1981,7 @@ MAP_REPO_VERSION_TO_SPECS.update({"pydantic/pydantic": SPECS_PYDANTIC})
 
 # pandas
 # https://pandas.pydata.org/pandas-docs/dev/development/contributing_environment.html
-TEST_PANDAS = "pytest -rA --tb=long"
+TEST_PANDAS = "pytest -n auto -rA --tb=long"
 SPECS_PANDAS = {
     k: {
         "packages": "environment.yml",
@@ -2000,7 +2000,7 @@ for k in ['0.16', '0.17', '0.18', '0.19', '0.20', '0.21', '0.22', '0.23', '0.24'
 MAP_REPO_VERSION_TO_SPECS.update({"pandas-dev/pandas": SPECS_PANDAS})
 
 # hydra
-TEST_HYDRA = "pytest -rA --tb=long"
+TEST_HYDRA = "pytest -n auto -rA --tb=long"
 SPECS_HYDRA = {
     k: {
         "python": "3.8",

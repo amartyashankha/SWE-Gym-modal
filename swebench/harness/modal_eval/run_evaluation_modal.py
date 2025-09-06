@@ -82,7 +82,8 @@ class ModalSandboxRuntime:
                 REMOTE_SANDBOX_ENTRYPOINT_PATH,
             ),
             timeout=timeout,
-            cpu=4,
+            cpu=32,  # Increased from 4 to 8 CPUs for faster parallel test execution
+            memory=32768,  # 32GB RAM to support parallel test processes with 32 CPUs
         )
 
     async def _read_stream(
